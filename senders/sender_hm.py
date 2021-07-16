@@ -6,7 +6,7 @@ if __name__ == '__main__':
 
     # message = b'Hello Russian'
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    filename = 'confirmation_main_3.wav'
+    filename = 'audiofile_collection/hello_main.wav'
 
     with wave.open(filename, 'rb') as file:
         frameCount = file.getnframes()
@@ -19,9 +19,7 @@ if __name__ == '__main__':
             client_socket.sendto(frame, ('127.0.0.1', 5005))
             curFrame += 1
 
-            sleep(1/bitrate)
         else:
             client_socket.sendto(b'', ('127.0.0.1', 5005))
 
-    print('finish')
-
+    print('finish hm')

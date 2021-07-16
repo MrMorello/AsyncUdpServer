@@ -2,6 +2,7 @@ import socket
 import wave
 from select import select
 
+
 connections = {}
 
 
@@ -9,47 +10,39 @@ def event_loop():
     while True:
         try:
             ready_to_read, _, _ = select(to_monitoring, [], [])  # read write error
-
-            for sock in ready_to_read:
-                if sock is server_socket:
-                    accept_data(sock)
-        except ValueError as e:
+        except ValueError:
             print('all connections closed')
             server_socket.close()
             return
+
+        for sock in ready_to_read:
+            if sock is server_socket:
+                accept_data()
 
 
 def sock_address_to_str(addr):
     return f'{addr[0]}_{str(addr[1])}'
 
 
-def accept_data(sock):
+def accept_data():
     data, addr = server_socket.recvfrom(1024)
     if sock_address_to_str(addr) not in connections:
         create_file(data, addr)
         filename = connections.get(sock_address_to_str(addr))
-        # with wave.open(filename, 'wb') as wavFile:
         if data:
             filename.writeframes(data)
         else:
             filename.close()
     else:
         filename = connections.get(sock_address_to_str(addr))
-        # with wave.open(filename, 'wb') as wavFile:
         if data:
             filename.writeframes(data)
         else:
             filename.close()
-    # if not data:
-    #     wavFile.close()
-    #     server_socket.close()
-    # else:
-    #     print(f"received message: {addr}, {data}")
-    #     wavFile.writeframes(data)
 
 
 def create_file(data, addr):
-    filename = f'{sock_address_to_str(addr)}.wav'
+    filename = f'saved_audio_files/{sock_address_to_str(addr)}.wav'
     key = f'{addr[0]}_{str(addr[1])}'
 
     wav_file = wave.open(filename, 'wb')
@@ -60,7 +53,6 @@ def create_file(data, addr):
 
     item = {key: wav_file}
     connections.update(item)
-    # wavFile.close()
 
 
 if __name__ == '__main__':
@@ -69,18 +61,4 @@ if __name__ == '__main__':
     to_monitoring.append(server_socket)
     server_socket.bind(('127.0.0.1', 5005))
 
-    # ep = 0
     event_loop()
-    # while True:
-    #     data, addr = server_socket.recvfrom(1024)
-    #     if not data:
-    #         wavFile.close()
-    #         server_socket.close()
-    #         break
-    #     ep += 1
-    #     print(f"received message: {ep}, {data}")
-    #     wavFile.writeframes(data)
-
-
-# class VawFile:
-#     def __init__(self, ip_port, :
