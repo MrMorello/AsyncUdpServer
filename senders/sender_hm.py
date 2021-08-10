@@ -4,9 +4,8 @@ from time import sleep
 
 if __name__ == '__main__':
 
-    # message = b'Hello Russian'
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    filename = 'audiofile_collection/hello_main.wav'
+    filename = '/home/ds/PycharmProjects/MediaServer_test_task/audiofile_collection/hello_main.wav'
 
     with wave.open(filename, 'rb') as file:
         frameCount = file.getnframes()
@@ -16,10 +15,10 @@ if __name__ == '__main__':
         frameArray = []
         while curFrame < frameCount:
             frame = file.readframes(1)
-            client_socket.sendto(frame, ('127.0.0.1', 5005))
+            client_socket.sendto(frame, ('127.0.0.1', 9999))
             curFrame += 1
-
+            sleep(1/200000)
         else:
-            client_socket.sendto(b'', ('127.0.0.1', 5005))
+            client_socket.sendto(b'', ('127.0.0.1', 9999))
 
     print('finish hm')
