@@ -1,5 +1,5 @@
 #bin/bash
 
-time python senders/sender_3.py &
-time python senders/sender_60.py &
-time python senders/sender_hm.py
+time python senders/sender_echo_3.py &
+time python senders/sender_echo_60.py &
+time python senders/sender_echo_hm.py
